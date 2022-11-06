@@ -48,14 +48,13 @@ int main()
 
 	//Viewport and framebuffer resizing
 	glViewport(0, 0, 800, 600);
-
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 //Object creation variables
 	
 	//Vertices of triangle in NDC (normalized Device Coordinates)
 	float vertices[] = {
-	   -0.5f, -0.5f, 0.0f,
+		-0.5f, -0.5f, 0.0f,
 		0.5f, -0.5f, 0.0f,
 		0.0f,  0.5f, 0.0f
 	};
