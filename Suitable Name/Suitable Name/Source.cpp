@@ -57,7 +57,7 @@ int main()
 	glViewport(0, 0, 800, 600);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-//Object creation variables
+//Object creation setups
 	
 	//Vertices of triangle in NDC (normalized Device Coordinates)
 	float vertices[] = {
@@ -110,6 +110,36 @@ int main()
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
+	//Linking Vertex Attributes
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	//0. copy our vertices array in a buffer for OpenGL to use
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	//1. then set the vertex attributes pointers
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	//2. use our shader program when we want to render an object
+	glUseProgram(shaderProgram);
+	//3. now draw that object
+	//someOpenGLFunctionThatDrawsOurTriangle();
+
+	//Vertex Array Object
+	unsigned int VAO;
+	glGenVertexArrays(1, &VAO);
+
+	//..:: Initialization Code (Done once (unless your object frequently changes)) :: .. 
+	// 1. bind vertex array object
+	glBindVertexArray(VAO);
+	// 2. copy our vertices array in a buffer for OpenGL to use
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	// 3. then set our vertex attributes pointers
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	
+
 
 	
 //Render Loop
@@ -117,12 +147,24 @@ int main()
 	// render loop (Main driver for render processing)
 	while (!glfwWindowShouldClose(window))
 	{
+
+		
+
+
 		// input processing function call
 		processInput(window);
 
 		// rendering commands 
 		glClearColor(1.0f, 0.0f, 0.894f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		//Drawing Code
+		glUseProgram(shaderProgram);
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+
+		
 
 
 		// check and call events and swap the buffers
